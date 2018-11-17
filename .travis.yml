@@ -1,0 +1,18 @@
+dist: trusty
+sudo: required
+group: beta
+language: node_js
+node_js:
+  - "8"
+cache:
+  directories:
+    - node_modules
+matrix:
+  fast_finish: true
+install:
+  - sudo apt-get -qq update
+before_script:
+  - export PATH=/snap/bin:${PATH}
+  - npm install
+script:
+  - npm run test

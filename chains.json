@@ -1,0 +1,34 @@
+{
+  "0xb355fe0ee489920a7e3e15d18d1275443100ad149417bc76601a1cb56dbf552a": {
+    "contracts": {
+      "0xbeee34fbe84b190ba24aa4b761f38098aa07f3525b7fb1fb7d78d47f1e692833": {
+        "name": "SafeMath",
+        "address": "0xFaa8d9d01FA2a53f671b82874dc6d5802586FD7A"
+      },
+      "0xcd24a6f952d169e69bd733faab951e4d3407a25dc1f151cbabb7fb198ece2884": {
+        "name": "Migrations",
+        "address": "0x45E86185e250C0513D4Fee76E12F5462Bfc95d20"
+      },
+      "0x7a1b80dd062502ee6df557f5c997c4143611bc37890d11bcce6b9c9e658b67c2": {
+        "name": "StakeManagable",
+        "address": "0x0CA584E5938E965FE557E9F62e8Ae1FdD11C55F9"
+      },
+      "0xe6863c808ae30941a515526cb4bd1a4909c31e41145f80a221d35f7d24ffb5c1": {
+        "name": "AddressUtils",
+        "address": "0xb756ce4bc897771C42583E7B1f259d3BeCcDb9fb"
+      },
+      "0x9540300d836addbd2e46064b184348dd8ab18d4bc0c2f96938cc49b5e3bde410": {
+        "name": "SupportsInterfaceWithLookup",
+        "address": "0x04A0CBf0C34c3447F4997015BbfD7f39791c67b6"
+      },
+      "0xae4d4b2983cb80fae8d09f5b006fe7aedf1aa1a1a3419ba7e7de363a21f09632": {
+        "name": "Ownable",
+        "address": "0x9fa41471F5aa63C88441FA7826dF18356C18a561"
+      },
+      "0x014e6e9f6ed689812d5f2428c68144a167f9ba6318456345001dabd31eff5e3b": {
+        "name": "ERC721BasicToken",
+        "address": "0xb8f0a158F2E3AAC37338587404c59457D68BEe9C"
+      }
+    }
+  }
+}

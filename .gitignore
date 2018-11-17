@@ -1,0 +1,13 @@
+node_modules
+build
+
+*.pid
+*.log
+
+.DS_Store
+
+# Embark
+.embark
+config/production/password
+config/livenet/password
+dist/
