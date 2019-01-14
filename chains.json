@@ -30,5 +30,45 @@
         "address": "0xb8f0a158F2E3AAC37338587404c59457D68BEe9C"
       }
     }
+  },
+  "0x64af81f552631dd06b7b4d045c539bad15d99d91cc1bf991cdaac4a9455ab168": {
+    "contracts": {
+      "0xdbceb5541cd767ee4ecae85c3caf3ffe02d6436764d3781d2c4ff7944f80bac5": {
+        "name": "ERC20Mock",
+        "address": "0x326ED1cc05Fc54432A6Ffb1FDcFF172b3133F3BB"
+      },
+      "0x3bdd546194b5b26c7a7bcccb3510da8fdfb7e62832e8e11ea8d9426c925083b9": {
+        "name": "Roles",
+        "address": "0x6be32225E037c464038944E8415E664b5C99f264"
+      },
+      "0xbeee34fbe84b190ba24aa4b761f38098aa07f3525b7fb1fb7d78d47f1e692833": {
+        "name": "SafeMath",
+        "address": "0x7E7350C59d0FD775D86d0315da4a2D8AB7F353e2"
+      },
+      "0xa2f7b342b40c518c191a9cf596eeed6c1ba2f5da62416faa51eef5440ef5801f": {
+        "name": "ERC20",
+        "address": "0x1800b780858A25a7a57E1BEB9a0C1A665AbBe90d"
+      },
+      "0x23e20e1a9b8107a83d0107c9e6f12498a755a42a8f48eba4c094b3c3f871875e": {
+        "name": "ERC721",
+        "address": "0x2900A150a6e2a302b28A406a99A6e8Bd233435A3"
+      },
+      "0x3f478e640983e31f536adf0c223b873135b6ca9b4398b38737b7e1135176a2f1": {
+        "name": "ERC721Burnable",
+        "address": "0x92d5ea88e157cD3ce5bAF3eFabC72854ae6a1346"
+      },
+      "0xb607044e76223c289fb10ff3281f3a93529d0c482f803d846045f61f18fca90e": {
+        "name": "ERC721Enumerable",
+        "address": "0x5E37Ab0d28E84177337022513C25fF7Fe1495785"
+      },
+      "0x87b65206d87b0acdf97f781a302fed3adca5410126e936e48633573874e21f27": {
+        "name": "ERC721Mintable",
+        "address": "0xb6A27230BafAf8D958209650a90ED89311a0b303"
+      },
+      "0x57c102c9dc89d0b4d4d00e552b2552ba5cbc64a4e6dc0fc70d137ee60349ab5a": {
+        "name": "Address",
+        "address": "0x5A3f3eaD6e328Bf3900979DcF8E24b2d331C7259"
+      }
+    }
   }
 }

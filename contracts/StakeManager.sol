@@ -132,8 +132,4 @@ contract StakeManager is Validator {
     // change signer
     validators[validatorId].signer = newSigner;
   }
-
-  // function submitEpochMock(uint256 newEpoch) public {
-  //   currentEpoch = newEpoch;
-  // }
 }
