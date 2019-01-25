@@ -4,9 +4,10 @@ import { SafeMath } from "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import { ERC20 } from "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 
 import { Validator } from "./Validator.sol";
+import { IStakeManager } from "./IStakeManager.sol";
 
 
-contract StakeManager is Validator {
+contract StakeManager is IStakeManager, Validator {
   using SafeMath for uint256;
 
   //
