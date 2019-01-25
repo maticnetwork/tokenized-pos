@@ -70,7 +70,7 @@ contract StakeManager is IStakeManager, Validator {
     address signer = user;
 
     // mint token
-    mint(counter, user);
+    _mint(counter, user);
 
     // validator state
     ValidatorState memory validatorState = ValidatorState({
@@ -112,7 +112,7 @@ contract StakeManager is IStakeManager, Validator {
     emit Unstaked(msg.sender, validatorId, currentEpoch);
 
     // burn validator
-    burn(validatorId);
+    _burn(validatorId);
 
     // update total stake
     totalStaked = totalStaked.sub(validators[validatorId].amount);
