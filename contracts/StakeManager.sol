@@ -64,13 +64,14 @@ contract StakeManager is IStakeManager, Validator, RootChainable, Lockable {
 
   // signer to Validator mapping
   mapping (address => address) public signerToValidator;
-  mapping (uint256 => address) public idToValidator;
+  mapping (uint96 => address) private idToValidator; // for internal use only, for accurate data use validators mapping
 
   mapping (address => Validator) public validators;
 
   struct State {
     int256 amount;
     int256 stakerCount;
+    uint96[] removeValidatorIds;
   }
   //Mapping for epoch to totalStake for that epoch
   mapping (uint256 => State) public validatorState;
@@ -90,11 +91,11 @@ contract StakeManager is IStakeManager, Validator, RootChainable, Lockable {
     _;
   }
 
-  function stake(uint256 amount, uint96 validatorId) public {
-    stakeFor(msg.sender, amount, validatorId);
+  function stake(uint256 amount, address signer, uint96 validatorId) public {
+    stakeFor(msg.sender, amount, signer, validatorId);
   }
 
-  function stakeFor(address user, uint256 amount, uint96 validatorId) public onlyWhenUnlocked {
+  function stakeFor(address user, uint256 amount, address signer, uint96 validatorId) public onlyWhenUnlocked {
     require(validators[user].epoch == 0, "No second time staking");
     address unstakeValidator = idToValidator[validatorId];
     require(validatorId != 0 && validatorId <= validatorThreshold);
@@ -103,7 +104,7 @@ contract StakeManager is IStakeManager, Validator, RootChainable, Lockable {
 
     // require(validatorThreshold*2 > validatorList.currentSize(), "Validator set full");  use id 
     require(amount < MAX_UINT96, "Stay realistic!!");
-    
+
     require(signerToValidator[user] == address(0x0));
 
     uint256 minValue = validatorList.getMin();
@@ -124,10 +125,10 @@ contract StakeManager is IStakeManager, Validator, RootChainable, Lockable {
       amount: amount,
       activationEpoch: 0,
       deactivationEpoch: 0,
-      signer: user
+      signer: signer
     });
 
-    signerToValidator[user] = user;
+    signerToValidator[signer] = user; // TODO: revert back to signer
 
     // 96bits amount(10^29) 160 bits user address
     uint256 value = amount << 160 | uint160(user);
@@ -140,9 +141,9 @@ contract StakeManager is IStakeManager, Validator, RootChainable, Lockable {
       validatorState[currentEpoch].stakerCount += int256(1);
     } else {
       require(validators[unstakeValidator].epoch != 0);
-      require(validators[unstakeValidator].activationEpoch != 0 && validators[unstakeValidator].deactivationEpoch == 0);
+      // require(validators[unstakeValidator].activationEpoch != 0 && validators[unstakeValidator].deactivationEpoch == 0);
       require(validators[user].amount > validators[unstakeValidator].amount);
-      value = validators[unstakeValidator].amount << 160 | uint160(unstakeValidator);
+      // value = validators[unstakeValidator].amount << 160 | uint160(unstakeValidator);
       uint256 dPlusTwo = currentEpoch.add(dynasty.mul(2));
       validators[unstakeValidator].deactivationEpoch = dPlusTwo;
       validators[user].activationEpoch = dPlusTwo;
@@ -151,7 +152,7 @@ contract StakeManager is IStakeManager, Validator, RootChainable, Lockable {
         validatorState[dPlusTwo].amount +
         int256(amount) - int256(validators[unstakeValidator].amount)
       );
-      
+
       // _clearApproval(unstakeValidator, validatorId);
       // _removeTokenFrom(unstakeValidator, validatorId);
       // _addTokenTo(user, validatorId);
@@ -160,6 +161,7 @@ contract StakeManager is IStakeManager, Validator, RootChainable, Lockable {
       emit UnstakeInit(unstakeValidator, validators[unstakeValidator].amount, dPlusTwo);
     }
     _mint(user, validatorId);
+    idToValidator[validatorId] = user;
     emit Staked(user, validators[user].activationEpoch, amount, totalStaked);
   }
 
@@ -176,7 +178,9 @@ contract StakeManager is IStakeManager, Validator, RootChainable, Lockable {
     validatorState[exitEpoch].stakerCount = (
       validatorState[exitEpoch].stakerCount - 1);
 
-    _burn(msg.sender, validatorId);
+    _burn(msg.sender, validatorId); // still a validator for D+2, since unstaking won't need NFT properties
+    // delete idToValidator[validatorId];
+    validatorState[exitEpoch].removeValidatorIds.push(validatorId);
 
     emit UnstakeInit(msg.sender, amount, exitEpoch);
   }
@@ -208,12 +212,13 @@ contract StakeManager is IStakeManager, Validator, RootChainable, Lockable {
     return _validators;
   }
 
-  function getStakerDetails(address user) public view returns(uint256, uint256, uint256, address) {
+  function getStakerDetails(address user) public view returns(uint256, uint256, uint256, address, uint96) {
     return (
       validators[user].amount,
       validators[user].activationEpoch,
       validators[user].deactivationEpoch,
-      validators[user].signer
+      validators[user].signer,
+      validators[user].validatorId
       );
   }
 
@@ -267,9 +272,13 @@ contract StakeManager is IStakeManager, Validator, RootChainable, Lockable {
       validatorState[currentEpoch].stakerCount + validatorState[nextEpoch].stakerCount
     );
 
-    currentEpoch = nextEpoch;
+    for (uint64 i = 0;i < validatorState[nextEpoch].removeValidatorIds.length;i++) {
+      delete idToValidator[validatorState[nextEpoch].removeValidatorIds[i]];
+    }
     // erase old data/history
-    delete validatorState[currentEpoch.sub(1)];
+    delete validatorState[currentEpoch];
+
+    currentEpoch = nextEpoch;
   }
 
   function updateMinLockInPeriod(uint256 epochs) public onlyOwner {
